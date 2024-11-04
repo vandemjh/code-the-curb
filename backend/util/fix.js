@@ -35,6 +35,8 @@ const readParkingData = new Promise((res) => {
 });
 
 readParkingData.then((i) => {
-  fs.writeFileSync('./parking-fixed.json', JSON.stringify(i));
-  console.log(i);
+  fs.writeFileSync('./parking-fixed.json', JSON.stringify(i.parkingData));
+  console.log(`Wrote ${i.parkingData.length} entries`);
+  fs.writeFileSync('./stalls.json', JSON.stringify(i.stallData));
+  console.log(`Wrote ${i.stallData.length} stalls`);
 });
