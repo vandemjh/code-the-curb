@@ -15,9 +15,15 @@ print(f"Read {data.shape[0]} rows")
 # Set correct column names based on your data format
 data.columns = ["id", "avg", "day", "hour"]
 
+# Add cyclical features for time components
+data["hour_sin"] = np.sin(2 * np.pi * data["hour"] / 24)
+data["hour_cos"] = np.cos(2 * np.pi * data["hour"] / 24)
+data["day_sin"] = np.sin(2 * np.pi * data["day"] / 7)  # Assuming days are 0-6
+data["day_cos"] = np.cos(2 * np.pi * data["day"] / 7)
+
 # Set up the features for one-hot encoding and numerical processing
 categorical_features = ["id"]
-numerical_features = ["day", "hour"]
+numerical_features = ["hour_sin", "hour_cos", "day_sin", "day_cos"]  # Updated features
 
 # Create the preprocessing pipeline
 preprocessor = ColumnTransformer(
@@ -42,11 +48,11 @@ X_test_processed = preprocessor.transform(X_test)
 
 # Random Forest Regressor parameters
 param_dist = {
-    "n_estimators": randint(100, 500),
+    "n_estimators": randint(100, 1000),  # Increased max estimators
     "max_depth": randint(5, 50),
     "min_samples_split": randint(2, 20),
     "min_samples_leaf": randint(1, 10),
-    "max_features": ["auto", "sqrt"],
+    "max_features": ["sqrt", "log2", None],
     "bootstrap": [True, False],
 }
 
@@ -58,14 +64,16 @@ cv = RepeatedKFold(n_splits=5, n_repeats=3, random_state=42)
 random_search = RandomizedSearchCV(
     estimator=rf,
     param_distributions=param_dist,
-    n_iter=20,  # Increased from 10 to 20 for better parameter search
+    n_iter=30,  # Increased number of iterations
     cv=cv,
     verbose=10,
     random_state=42,
     n_jobs=-1,
-    scoring="neg_mean_squared_error",  # Added explicit scoring metric
+    scoring="neg_mean_squared_error",
+    error_score="raise",
 )
 
+print("\nStarting model training...")
 random_search.fit(X_train_processed, y_train)
 best_model = random_search.best_estimator_
 
@@ -102,3 +110,10 @@ feature_importance = feature_importance.sort_values("importance", ascending=Fals
 print("\nFeature Importances:")
 for _, row in feature_importance.iterrows():
     print(f"Feature: {row['feature']:<20} Importance: {row['importance']:.4f}")
+
+# Additional analysis of predictions
+print("\nPrediction Distribution:")
+print(f"Mean predicted value: {np.mean(y_pred):.4f}")
+print(f"Std of predicted values: {np.std(y_pred):.4f}")
+print(f"Min predicted value: {np.min(y_pred):.4f}")
+print(f"Max predicted value: {np.max(y_pred):.4f}")
