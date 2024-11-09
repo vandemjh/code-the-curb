@@ -1,13 +1,13 @@
 const getDateInfo = (o) => {
   const date = new Date(o.payloadTimestamp);
   const daysOfWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+    'sunday',
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
   ];
   const dayOfWeek = date.getDay();
   const hours = date.getHours();

@@ -35,13 +35,16 @@ const readParkingData = new Promise((res) => {
 
 readParkingData.then((i) => {
   const { parkingData } = i;
-  const toWrite = {};
+  const toWrite = [];
   Object.keys(parkingData).forEach((key) => {
     const [id, dayOfWeek, hours] = key.split('_');
-    const average = parkingData[key].totalOccupied / parkingData[key].count;
-    if (!toWrite[id]) toWrite[id] = {};
-    if (!toWrite[id][dayOfWeek]) toWrite[id][dayOfWeek] = {};
-    toWrite[id][dayOfWeek][hours] = average
+    const avg = parkingData[key].totalOccupied / parkingData[key].count;
+    toWrite.push({
+      id,
+      avg,
+      day: parseInt(dayOfWeek),
+      hour: parseInt(hours),
+    });
   });
   fs.writeFileSync(
     './parking-fixed.json',
