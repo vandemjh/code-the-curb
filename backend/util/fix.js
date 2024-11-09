@@ -8,7 +8,7 @@ const readParkingData = new Promise((res) => {
   const rl = readline.createInterface({
     input: fileStream,
   });
-  const parkingData = {};
+  const parkingData = [];
   rl.on('close', () => {
     res({ parkingData });
   });
@@ -21,36 +21,15 @@ const readParkingData = new Promise((res) => {
     const { data } = line;
     // Fix data
     data.forEach((i) => {
-      const o = strip(i);
-      const { id, status, hours, dayOfWeek } = o;
-      const key = `${id}_${dayOfWeek}_${hours}`;
-      if (!parkingData[key]) {
-        parkingData[key] = { totalOccupied: 0, count: 0 };
-      }
-      parkingData[key].totalOccupied += status;
-      parkingData[key].count += 1;
+      parkingData.push(strip(i))
     });
   });
 });
 
 readParkingData.then((i) => {
-  const { parkingData } = i;
-  const toWrite = [];
-  Object.keys(parkingData).forEach((key) => {
-    const [id, dayOfWeek, hours] = key.split('_');
-    const avgOccupancy = parkingData[key].totalOccupied / parkingData[key].count;
-    toWrite.push({
-      id,
-      avgOccupancy,
-      day: parseInt(dayOfWeek),
-      hour: parseInt(hours),
-    });
-  });
   fs.writeFileSync(
     './parking-fixed.json',
-    JSON.stringify(toWrite, undefined, 2),
+    JSON.stringify(i.parkingData, undefined, 2),
   );
-  console.log(`Wrote ${Object.keys(toWrite).length} entries`);
-  // fs.writeFileSync('./stalls.json', JSON.stringify(i.stallData));
-  // console.log(`Wrote ${i.stallData.length} stalls`);
+  console.log(`Wrote ${i.parkingData.length} entries`);
 });

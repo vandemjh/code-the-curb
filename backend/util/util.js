@@ -22,15 +22,14 @@ const getDateInfo = (o) => {
 const getStatus = (o) => (o.status === 'vacant' ? 0 : 1);
 
 const strip = (o) => {
-  const { dayOfWeek, hours, minutes } = getDateInfo(o);
+  const di = getDateInfo(o);
   const status = getStatus(o);
-  const id = o.blockfaceID;
   return {
-    id,
-    status,
-    hours,
-    minutes,
-    dayOfWeek,
+    id: o.blockfaceID,
+    s: status,
+    h: di.hours,
+    m: di.minutes,
+    d: di.dayOfWeek,
   };
 };
 
