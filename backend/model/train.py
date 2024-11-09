@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import pickle
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
-from sklearn.model_selection import RepeatedKFold, train_test_split, RandomizedSearchCV
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
@@ -18,12 +18,27 @@ data.columns = ["id", "avg", "day", "hour"]
 # Add cyclical features for time components
 data["hour_sin"] = np.sin(2 * np.pi * data["hour"] / 24)
 data["hour_cos"] = np.cos(2 * np.pi * data["hour"] / 24)
-data["day_sin"] = np.sin(2 * np.pi * data["day"] / 7)  # Assuming days are 0-6
+data["day_sin"] = np.sin(2 * np.pi * data["day"] / 7)
 data["day_cos"] = np.cos(2 * np.pi * data["day"] / 7)
+
+# Add time-based features
+data["is_weekend"] = (data["day"] >= 5).astype(int)
+data["is_business_hours"] = ((data["hour"] >= 9) & (data["hour"] <= 17)).astype(int)
+data["is_evening"] = ((data["hour"] >= 18) & (data["hour"] <= 23)).astype(int)
+data["is_morning"] = ((data["hour"] >= 5) & (data["hour"] <= 8)).astype(int)
+
+# Create interaction features
+data["weekend_evening"] = data["is_weekend"] * data["is_evening"]
+data["weekend_morning"] = data["is_weekend"] * data["is_morning"]
+data["weekend_business"] = data["is_weekend"] * data["is_business_hours"]
 
 # Set up the features for one-hot encoding and numerical processing
 categorical_features = ["id"]
-numerical_features = ["hour_sin", "hour_cos", "day_sin", "day_cos"]  # Updated features
+numerical_features = [
+    "hour_sin", "hour_cos", "day_sin", "day_cos",
+    "is_weekend", "is_business_hours", "is_evening", "is_morning",
+    "weekend_evening", "weekend_morning", "weekend_business"
+]
 
 # Create the preprocessing pipeline
 preprocessor = ColumnTransformer(
@@ -37,6 +52,13 @@ preprocessor = ColumnTransformer(
 X = data[categorical_features + numerical_features]
 y = data["avg"]
 
+# Print some basic statistics about the target variable
+print("\nTarget Variable Statistics:")
+print(f"Mean occupancy: {y.mean():.4f}")
+print(f"Std occupancy: {y.std():.4f}")
+print(f"Min occupancy: {y.min():.4f}")
+print(f"Max occupancy: {y.max():.4f}")
+
 # Split the data
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
@@ -48,29 +70,25 @@ X_test_processed = preprocessor.transform(X_test)
 
 # Random Forest Regressor parameters
 param_dist = {
-    "n_estimators": randint(100, 1000),  # Increased max estimators
-    "max_depth": randint(5, 50),
+    "n_estimators": randint(200, 1000),
+    "max_depth": randint(10, 100),
     "min_samples_split": randint(2, 20),
     "min_samples_leaf": randint(1, 10),
-    "max_features": ["sqrt", "log2", None],
+    "max_features": ["sqrt", "log2"],
     "bootstrap": [True, False],
 }
 
-# Initialize and train Random Forest Regressor with RandomizedSearchCV
+# Initialize and train Random Forest Regressor
 rf = RandomForestRegressor(random_state=42)
-
-cv = RepeatedKFold(n_splits=5, n_repeats=3, random_state=42)
 
 random_search = RandomizedSearchCV(
     estimator=rf,
     param_distributions=param_dist,
-    n_iter=30,  # Increased number of iterations
-    cv=cv,
+    n_iter=30,
     verbose=10,
     random_state=42,
     n_jobs=-1,
     scoring="neg_mean_squared_error",
-    error_score="raise",
 )
 
 print("\nStarting model training...")
@@ -107,13 +125,19 @@ feature_importance = pd.DataFrame(
 )
 feature_importance = feature_importance.sort_values("importance", ascending=False)
 
-print("\nFeature Importances:")
-for _, row in feature_importance.iterrows():
-    print(f"Feature: {row['feature']:<20} Importance: {row['importance']:.4f}")
+print("\nTop 10 Most Important Features:")
+print(feature_importance.head(10).to_string())
 
-# Additional analysis of predictions
-print("\nPrediction Distribution:")
-print(f"Mean predicted value: {np.mean(y_pred):.4f}")
-print(f"Std of predicted values: {np.std(y_pred):.4f}")
-print(f"Min predicted value: {np.min(y_pred):.4f}")
-print(f"Max predicted value: {np.max(y_pred):.4f}")
+# Analysis by time period
+print("\nPrediction Analysis by Time Period:")
+data['predictions'] = np.nan
+data.loc[y_test.index, 'predictions'] = y_pred
+data['abs_error'] = abs(data['avg'] - data['predictions'])
+
+print("\nMean Absolute Error by Day Type:")
+print(data.groupby('is_weekend')['abs_error'].mean())
+
+print("\nMean Absolute Error by Time of Day:")
+for period in ['is_morning', 'is_business_hours', 'is_evening']:
+    print(f"\n{period}:")
+    print(data.groupby(period)['abs_error'].mean())

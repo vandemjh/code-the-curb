@@ -38,10 +38,10 @@ readParkingData.then((i) => {
   const toWrite = [];
   Object.keys(parkingData).forEach((key) => {
     const [id, dayOfWeek, hours] = key.split('_');
-    const avg = parkingData[key].totalOccupied / parkingData[key].count;
+    const avgOccupancy = parkingData[key].totalOccupied / parkingData[key].count;
     toWrite.push({
       id,
-      avg,
+      avgOccupancy,
       day: parseInt(dayOfWeek),
       hour: parseInt(hours),
     });
