@@ -19,12 +19,19 @@ const getDateInfo = (o) => {
   };
 };
 
-const getStatus = (o) => (o.status === 'vacant' ? 1 : 0);
+const getStatus = (o) => (o.status === 'vacant' ? 0 : 1);
 
 const strip = (o) => {
-  const di = getDateInfo(o);
+  const { dayOfWeek, hours, minutes } = getDateInfo(o);
   const status = getStatus(o);
-  return { id: o.stallID, s: status, h: di.hours, m: di.minutes, d: di.dayOfWeek };
+  const id = o.blockfaceID;
+  return {
+    id,
+    status,
+    hours,
+    minutes,
+    dayOfWeek,
+  };
 };
 
 module.exports = {
