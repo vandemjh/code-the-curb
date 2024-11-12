@@ -4,12 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def predict_parking_day(stall_id, day):
-    categorical_features = ["stall_id"]
+def predict_parking_day(block_id, day):
+    categorical_features = ["stall_id"] # ["block_id"]
     numerical_features = ["time_sin", "time_cos", "day_sin", "day_cos"]
 
     with open("model.pkl", "rb") as f:
         best_model, preprocessor = pickle.load(f)
+        print(best_model)
 
     hours = range(24)
     probabilities = []
@@ -20,9 +21,9 @@ def predict_parking_day(stall_id, day):
         day_sin = np.sin(2 * np.pi * day / 7)
         day_cos = np.cos(2 * np.pi * day / 7)
 
-        sample_data = pd.DataFrame(
+        data = pd.DataFrame(
             {
-                "stall_id": [stall_id],
+                "stall_id": [block_id], #"block_id": [block_id],
                 "time_sin": [time_sin],
                 "time_cos": [time_cos],
                 "day_sin": [day_sin],
@@ -30,7 +31,7 @@ def predict_parking_day(stall_id, day):
             }
         )
 
-        X_new = sample_data[categorical_features + numerical_features]
+        X_new = data[categorical_features + numerical_features]
         X_new_processed = preprocessor.transform(X_new)
         prob = best_model.predict_proba(X_new_processed)[0][0]
         probabilities.append(prob)
@@ -38,11 +39,11 @@ def predict_parking_day(stall_id, day):
     return probabilities
 
 
-def plot_parking_probabilities(stall_id, day, probabilities):
+def plot_parking_probabilities(block_id, day, probabilities):
     hours = range(24)
     plt.figure(figsize=(12, 6))
     plt.plot(hours, probabilities, marker="o")
-    plt.title(f"Parking Occupancy Probability for {stall_id} on Day {day}")
+    plt.title(f"Parking Occupancy Probability for {block_id} on Day {day}")
     plt.xlabel("Hour of the Day")
     plt.ylabel("Probability of Occupancy")
     plt.xticks(range(0, 24, 2))
@@ -54,12 +55,12 @@ def plot_parking_probabilities(stall_id, day, probabilities):
     )
 
 
-stall_id = "N10HIIRS"
+block_id = "N10HIIRS"
 day = 3
 
 
-probabilities = predict_parking_day(stall_id, day)
+probabilities = predict_parking_day(block_id, day)
 print(f"Probabilities for each hour: {probabilities}")
 
 
-plot_parking_probabilities(stall_id, day, probabilities)
+plot_parking_probabilities(block_id, day, probabilities)

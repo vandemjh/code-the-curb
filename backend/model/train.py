@@ -14,7 +14,7 @@ from sklearn.compose import ColumnTransformer
 data = pd.read_json("./parking-fixed.json")
 print(f"Read {data.shape[0]} rows")
 
-data.columns = ["stall_id", "is_vacant", "hour", "minute", "day_of_week"]
+data.columns = ["block_id", "is_vacant", "hour", "minute", "day_of_week"]
 data["is_vacant"] = data["is_vacant"].astype(bool)
 data["time"] = data["hour"] * 60 + data["minute"]
 
@@ -25,7 +25,7 @@ data["day_sin"] = np.sin(2 * np.pi * data["day_of_week"] / 7)
 data["day_cos"] = np.cos(2 * np.pi * data["day_of_week"] / 7)
 
 
-categorical_features = ["stall_id"]
+categorical_features = ["block_id"]
 numerical_features = [
     # "hour",
     # "minute",
