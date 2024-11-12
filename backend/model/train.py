@@ -40,7 +40,7 @@ numerical_features = [
 preprocessor = ColumnTransformer(
     transformers=[
         ("num", "passthrough", numerical_features),
-        ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features),
+        ("cat", OneHotEncoder(handle_unknown="error"), categorical_features),
     ]
 )
 
