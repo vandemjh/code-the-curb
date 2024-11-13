@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 def predict_parking_day(block_id, day):
-    categorical_features = ["stall_id"] # ["block_id"]
+    categorical_features = ["block_id"]
     numerical_features = ["time_sin", "time_cos", "day_sin", "day_cos"]
 
     with open("model.pkl", "rb") as f:
@@ -23,7 +23,7 @@ def predict_parking_day(block_id, day):
 
         data = pd.DataFrame(
             {
-                "stall_id": [block_id], #"block_id": [block_id],
+                "block_id": [block_id],
                 "time_sin": [time_sin],
                 "time_cos": [time_cos],
                 "day_sin": [day_sin],
@@ -42,11 +42,12 @@ def predict_parking_day(block_id, day):
 def plot_parking_probabilities(block_id, day, probabilities):
     hours = range(24)
     plt.figure(figsize=(12, 6))
-    plt.plot(hours, probabilities, marker="o")
-    plt.title(f"Parking Occupancy Probability for {block_id} on Day {day}")
-    plt.xlabel("Hour of the Day")
-    plt.ylabel("Probability of Occupancy")
-    plt.xticks(range(0, 24, 2))
+    plt.plot(hours, probabilities, marker="o", color="#1f77b4", markeredgecolor="white")
+    plt.title(f"Parking Occupancy Probability for {block_id} on Day {day}", color="white")
+    plt.xlabel("Hour of the Day", color="white")
+    plt.ylabel("Probability of Occupancy", color="white")
+    plt.xticks(range(0, 24, 2), color="white")
+    plt.yticks(color="white")
     plt.ylim(0, 1)
     plt.grid(True, linestyle="--", alpha=0.7)
     plt.savefig(
