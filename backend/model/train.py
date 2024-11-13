@@ -67,12 +67,12 @@ param_dist = {
 }
 
 
-rf = RandomForestClassifier(random_state=42)
+rf = RandomForestClassifier(random_state=42, verbose=10, n_jobs=-1)
 
 random_search = RandomizedSearchCV(
     estimator=rf,
     param_distributions=param_dist,
-    verbose=2,
+    verbose=10,
     random_state=42,
     n_jobs=-1,
 )
@@ -80,9 +80,9 @@ random_search = RandomizedSearchCV(
 # Uncomment to search
 # random_search.fit(X_train_processed, y_train)
 # best_model = random_search.best_estimator_
+# print("Best parameters found: ", random_search.best_params_)
 best_model = rf.fit(X_train_processed, y_train)
 
-print("Best parameters found: ", random_search.best_params_)
 
 
 with open("model.pkl", "wb") as f:
