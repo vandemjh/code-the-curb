@@ -13,6 +13,7 @@ import {
   alpha,
 } from '@mui/material';
 import { MapPin, Navigation, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 // Create custom dark theme
 const darkTheme = createTheme({
@@ -132,36 +133,50 @@ const ParkingForm = () => {
 
           <Box component="form" onSubmit={handleSubmit}>
             <Stack spacing={2.5}>
-              {!isOneWay && (
-                <TextField
-                  fullWidth
-                  placeholder="From location..."
-                  value={fromLocation}
-                  onChange={(e) => setFromLocation(e.target.value)}
-                  variant="outlined"
-                  InputProps={{
-                    startAdornment: (
-                      <MapPin
-                        size={18}
-                        style={{ marginRight: 8, opacity: 0.7 }}
-                      />
-                    ),
-                  }}
-                />
-              )}
+              <AnimatePresence mode="popLayout">
+                {!isOneWay && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <TextField
+                      fullWidth
+                      placeholder="From location..."
+                      value={fromLocation}
+                      onChange={(e) => setFromLocation(e.target.value)}
+                      variant="outlined"
+                      slotProps={{
+                        input: {
+                          startAdornment: (
+                            <MapPin
+                              size={18}
+                              style={{ marginRight: 8, opacity: 0.7 }}
+                            />
+                          ),
+                        },
+                      }}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
               <TextField
                 fullWidth
                 placeholder="To location..."
                 value={toLocation}
                 onChange={(e) => setToLocation(e.target.value)}
                 variant="outlined"
-                InputProps={{
-                  startAdornment: (
-                    <Navigation
-                      size={18}
-                      style={{ marginRight: 8, opacity: 0.7 }}
-                    />
-                  ),
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <Navigation
+                        size={18}
+                        style={{ marginRight: 8, opacity: 0.7 }}
+                      />
+                    ),
+                  },
                 }}
               />
               <Button
