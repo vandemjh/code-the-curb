@@ -3,7 +3,7 @@ import ParkingForm from './components/RouteForm';
 
 function App() {
   return (
-    <div>
+    <div class="main">
       <header></header>
       <ParkingForm />
     </div>

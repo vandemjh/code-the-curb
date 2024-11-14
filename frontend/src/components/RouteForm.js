@@ -89,20 +89,23 @@ const ParkingForm = () => {
         }}
       >
         <Stack spacing={4}>
-          <Typography
-            variant="h4"
-            align="center"
-            sx={{
-              fontWeight: 700,
-              background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              mb: 2,
-            }}
-          >
-            Arlipark
-          </Typography>
+          <Stack spacing={4} sx={{ alignItems: 'center' }}>
+            <img src="arlicon.png" alt="icon" class="arlicon" />
+            <Typography
+              variant="h4"
+              align="center"
+              sx={{
+                fontWeight: 700,
+                background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                mb: 2,
+              }}
+            >
+              Arlipark
+            </Typography>
+          </Stack>
 
           <ToggleButtonGroup
             value={isOneWay ? 'one-way' : 'two-way'}
