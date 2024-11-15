@@ -8,7 +8,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
-import { ArrowRight, ArrowLeftRight, CircleArrowRight } from 'lucide-react';
+import { ArrowLeftRight, ArrowRight, CircleArrowRight } from 'lucide-react';
 import React, { useState } from 'react';
 import { darkTheme } from '../util/theme';
 import LocationPicker from './LocationPicker';
@@ -121,10 +121,10 @@ const ParkingForm = () => {
               {buttonTexts[step]}
             </Button>
             <div>
-        <h3>Selected Points:</h3>
-        <p>Picker 1: {JSON.stringify(pickerOnePoint)}</p>
-        <p>Picker 2: {JSON.stringify(pickerTwoPoint)}</p>
-      </div>
+              <h3>Selected Points:</h3>
+              <p>Picker 1: {JSON.stringify(pickerOnePoint)}</p>
+              <p>Picker 2: {JSON.stringify(pickerTwoPoint)}</p>
+            </div>
           </Stack>
         </Box>
       </Paper>
