@@ -91,7 +91,7 @@ const ParkingForm = () => {
       >
         <Stack spacing={4}>
           <Stack spacing={4} sx={{ alignItems: 'center' }}>
-            <img src="arlicon.png" alt="icon" class="arlicon" />
+            <img src="arlicon.png" alt="icon" className="arlicon" />
             <Typography
               variant="h4"
               align="center"
@@ -131,16 +131,16 @@ const ParkingForm = () => {
             </ToggleButton>
           </ToggleButtonGroup>
 
-          <Box component="form" onSubmit={handleSubmit}>
-            <Stack spacing={2.5}>
-              <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="popLayout">
+            <Box component="form" onSubmit={handleSubmit}>
+              <Stack spacing={2.5}>
                 {!isOneWay && (
                   <motion.div
+                    key="fromLocation"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
-                    className="overflow-hidden"
                   >
                     <TextField
                       fullWidth
@@ -161,45 +161,54 @@ const ParkingForm = () => {
                     />
                   </motion.div>
                 )}
-              </AnimatePresence>
-              <TextField
-                fullWidth
-                placeholder="To location..."
-                value={toLocation}
-                onChange={(e) => setToLocation(e.target.value)}
-                variant="outlined"
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <Navigation
-                        size={18}
-                        style={{ marginRight: 8, opacity: 0.7 }}
-                      />
-                    ),
-                  },
-                }}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                sx={{
-                  mt: 2,
-                  py: 1.5,
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  textTransform: 'none',
-                  background: 'linear-gradient(45deg, #3b82f6, #2563eb)',
-                  '&:hover': {
-                    background: 'linear-gradient(45deg, #2563eb, #1d4ed8)',
-                  },
-                }}
-                endIcon={<ArrowRight size={20} />}
-              >
-                Find Parking
-              </Button>
-            </Stack>
-          </Box>
+
+                <motion.div
+                  layout
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                >
+                  <TextField
+                    key="toLocation"
+                    fullWidth
+                    placeholder="To location..."
+                    value={toLocation}
+                    onChange={(e) => setToLocation(e.target.value)}
+                    variant="outlined"
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <Navigation
+                            size={18}
+                            style={{ marginRight: 8, opacity: 0.7 }}
+                          />
+                        ),
+                      },
+                    }}
+                  />
+                  <Button
+                    fullWidth
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    sx={{
+                      mt: 2,
+                      py: 1.5,
+                      fontSize: '1rem',
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      background: 'linear-gradient(45deg, #3b82f6, #2563eb)',
+                      '&:hover': {
+                        background: 'linear-gradient(45deg, #2563eb, #1d4ed8)',
+                      },
+                    }}
+                    endIcon={<ArrowRight size={20} />}
+                  >
+                    Find Parking
+                  </Button>
+                </motion.div>
+              </Stack>
+            </Box>
+          </AnimatePresence>
         </Stack>
       </Paper>
     </ThemeProvider>
