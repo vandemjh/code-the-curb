@@ -60,6 +60,17 @@ const ParkingForm = () => {
     }),
   };
 
+  const imageVariants = {
+    initial: {
+      width: '10em',
+      height: 'auto',
+    },
+    animate: {
+      width: step > 0 ? '5em' : '10em',
+      height: 'auto',
+    },
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Paper
@@ -71,8 +82,22 @@ const ParkingForm = () => {
         }}
       >
         <Stack spacing={4} sx={{ alignItems: 'center' }}>
-          <img src="arlicon.png" alt="icon" className="arlicon" />
-
+          <motion.div
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            variants={imageVariants}
+            initial="initial"
+            animate="animate"
+          >
+            <img
+              src="arlicon.png"
+              alt="icon"
+              className="arlicon"
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
+            />
+          </motion.div>
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={step}
