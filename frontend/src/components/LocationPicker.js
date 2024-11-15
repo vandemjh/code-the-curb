@@ -1,6 +1,4 @@
-import {
-  ThemeProvider
-} from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -17,8 +15,8 @@ const bounds = {
 
 const dims = {
   width: 3077,
-  height: 2830
-}
+  height: 2830,
+};
 
 const scale = 5;
 
@@ -63,17 +61,16 @@ const LocationPicker = () => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <Card sx={{ width: 'fit-content', padding: 2 }}>
-        <Typography variant="h6" component="div" sx={{ marginBottom: 1 }}>
-          Location Picker
-        </Typography>
-        <CardContent>
+      <Card sx={{ width: 'fit-content', padding: 2, borderRadius: '12' }}>
+        <CardContent
+          sx={{
+            borderRadius: '12',
+          }}
+        >
           <Box
             sx={{
               position: 'relative',
               cursor: 'crosshair',
-              border: '1px solid',
-              borderColor: 'grey.300',
               overflow: 'hidden',
               width: mapWidth,
               height: mapHeight,

@@ -17,8 +17,8 @@ const buttonTexts = ['Find Parking', 'Next', 'Next'];
 
 const ParkingForm = () => {
   const [isOneWay, setIsOneWay] = useState(false);
-  const [fromLocation, setFromLocation] = useState('');
-  const [toLocation, setToLocation] = useState('');
+  const [pickerOnePoint, setPickerOnePoint] = useState(null);
+  const [pickerTwoPoint, setPickerTwoPoint] = useState(null);
   const [step, setStep] = useState(0);
 
   const handleModeChange = (_, newMode) => {
@@ -85,8 +85,18 @@ const ParkingForm = () => {
             </ToggleButtonGroup>
           </Stack>
         )}
-        {step === 1 && <LocationPicker />}
-        {step === 2 && <LocationPicker />}
+        {step === 1 && (
+          <LocationPicker
+            selectedPoint={pickerOnePoint}
+            setSelectedPoint={setPickerOnePoint}
+          />
+        )}
+        {step === 2 && (
+          <LocationPicker
+            selectedPoint={pickerTwoPoint}
+            setSelectedPoint={setPickerTwoPoint}
+          />
+        )}
         {step === 3 && <p>3</p>}
         <Box component="form" onSubmit={handleSubmit}>
           <Stack spacing={2.5}>
@@ -110,6 +120,11 @@ const ParkingForm = () => {
             >
               {buttonTexts[step]}
             </Button>
+            <div>
+        <h3>Selected Points:</h3>
+        <p>Picker 1: {JSON.stringify(pickerOnePoint)}</p>
+        <p>Picker 2: {JSON.stringify(pickerTwoPoint)}</p>
+      </div>
           </Stack>
         </Box>
       </Paper>
