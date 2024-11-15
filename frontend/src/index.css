@@ -19,3 +19,21 @@ body {
 .overflow-hidden {
   overflow: hidden;
 }
+
+Button {
+  padding-top: 1.5;
+  padding-bottom: 1.5;
+  font-size: '1rem';
+  font-weight: 600;
+  background: 'linear-gradient(45deg, #3b82f6, #2563eb)';
+}
+
+Button:hover {
+  background: 'linear-gradient(45deg, #2563eb, #1d4ed8)';
+}
+
+Typography > * {
+  font-weight: 700;
+  background: 'linear-gradient(45deg, #60a5fa, #3b82f6)';
+  background-clip: 'text';
+}

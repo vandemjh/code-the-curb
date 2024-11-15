@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeftRight, ArrowRight, CircleArrowRight } from 'lucide-react';
+import { ArrowLeftRight, ArrowRight, CircleArrowLeft, CircleArrowRight } from 'lucide-react';
 import React, { useState } from 'react';
 import { darkTheme } from '../util/theme';
 import LocationPicker from './LocationPicker';
@@ -67,20 +67,6 @@ const ParkingForm = () => {
       >
         <Stack spacing={4} sx={{ alignItems: 'center' }}>
           <img src="arlicon.png" alt="icon" className="arlicon" />
-          <Typography
-            variant="h4"
-            align="center"
-            sx={{
-              fontWeight: 700,
-              background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              mb: 2,
-            }}
-          >
-            Arlipark
-          </Typography>
 
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
@@ -93,30 +79,37 @@ const ParkingForm = () => {
               transition={{ duration: 0.5 }}
             >
               {step === 0 && (
-                <Stack spacing={4}>
-                  <ToggleButtonGroup
-                    value={isOneWay ? 'one-way' : 'two-way'}
-                    exclusive
-                    onChange={handleModeChange}
-                    fullWidth
+                <>
+                  <Typography
+                    variant="h4"
+                    align="center"
                     sx={{
-                      '& .MuiToggleButton-root': {
-                        py: 1.5,
-                        fontSize: '1rem',
-                        fontWeight: 500,
-                      },
+                      fontWeight: 700,
+                      background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
+                      backgroundClip: 'text',
+                      mb: 2,
                     }}
                   >
-                    <ToggleButton value="one-way">
-                      <ArrowRight size={18} style={{ marginRight: 8 }} />
-                      One way
-                    </ToggleButton>
-                    <ToggleButton value="two-way">
-                      <ArrowLeftRight size={18} style={{ marginRight: 8 }} />
-                      Two way
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                </Stack>
+                    Arlipark
+                  </Typography>
+                  <Stack spacing={4}>
+                    <ToggleButtonGroup
+                      value={isOneWay ? 'one-way' : 'two-way'}
+                      exclusive
+                      onChange={handleModeChange}
+                      fullWidth
+                    >
+                      <ToggleButton value="one-way">
+                        <ArrowRight size={18} style={{ marginRight: 8 }} />
+                        One way
+                      </ToggleButton>
+                      <ToggleButton value="two-way">
+                        <ArrowLeftRight size={18} style={{ marginRight: 8 }} />
+                        Two way
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                  </Stack>
+                </>
               )}
               {step === 1 && (
                 <LocationPicker
@@ -174,6 +167,7 @@ const ParkingForm = () => {
                       color: '#2563eb',
                     },
                   }}
+                  endIcon={<CircleArrowLeft size={20} />}
                 >
                   Back
                 </Button>
