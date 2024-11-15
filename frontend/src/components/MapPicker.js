@@ -1,22 +1,26 @@
-import React, { useState } from 'react';
+import {
+  ThemeProvider
+} from '@mui/material';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import { MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { darkTheme } from '../util/theme';
+
+const bounds = {
+  topLeft: { lat: 38.934819, lng: -77.174734 },
+  bottomRight: { lat: 38.825924, lng: -77.031768 },
+};
 
 const LocationPicker = () => {
   const [selectedPoint, setSelectedPoint] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const mapWidth = 300;
-  const mapHeight = 200;
-
-  const bounds = {
-    topLeft: { lat: 38.934819, lng: -77.174734 },
-    bottomRight: { lat: 38.825924, lng: -77.031768 },
-  };
+  const mapWidth = 500;
+  const mapHeight = 600;
 
   const pixelToCoordinates = (x, y) => {
     const latRange = bounds.topLeft.lat - bounds.bottomRight.lat;
@@ -61,61 +65,63 @@ const LocationPicker = () => {
   };
 
   return (
-    <Card sx={{ width: 'fit-content', padding: 2 }}>
-      <Typography variant="h6" component="div" sx={{ marginBottom: 1 }}>
-        Location Picker
-      </Typography>
-      <CardContent>
-        <Box
-          sx={{
-            position: 'relative',
-            cursor: 'crosshair',
-            border: '1px solid',
-            borderColor: 'grey.300',
-            overflow: 'hidden',
-            width: mapWidth,
-            height: mapHeight,
-          }}
-          onClick={handleClick}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-        >
-          <img
-            src="map.png"
-            alt="Map"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
+    <ThemeProvider theme={darkTheme}>
+      <Card sx={{ width: 'fit-content', padding: 2 }}>
+        <Typography variant="h6" component="div" sx={{ marginBottom: 1 }}>
+          Location Picker
+        </Typography>
+        <CardContent>
+          <Box
+            sx={{
+              position: 'relative',
+              cursor: 'crosshair',
+              border: '1px solid',
+              borderColor: 'grey.300',
+              overflow: 'hidden',
+              width: mapWidth,
+              height: mapHeight,
+            }}
+            onClick={handleClick}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+          >
+            <img
+              src="map.png"
+              alt="Map"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+
+            {selectedPoint && (
+              <IconButton
+                sx={{
+                  position: 'absolute',
+                  left: selectedPoint.x,
+                  top: selectedPoint.y,
+                  transform: 'translate(-50%, -50%)',
+                  color: 'red',
+                }}
+              >
+                <MapPin size={24} fill="red" color="black" />
+              </IconButton>
+            )}
+          </Box>
 
           {selectedPoint && (
-            <IconButton
-              sx={{
-                position: 'absolute',
-                left: selectedPoint.x,
-                top: selectedPoint.y,
-                transform: 'translate(-50%, -50%)',
-                color: 'red',
-              }}
-            >
-              <MapPin size={24} fill="red" color="black" />
-            </IconButton>
+            <Box sx={{ marginTop: 2, fontSize: '0.875rem' }}>
+              <Typography variant="body2" fontWeight="bold">
+                Selected Location:
+              </Typography>
+              <Typography variant="body2">
+                Latitude: {selectedPoint.lat}°
+              </Typography>
+              <Typography variant="body2">
+                Longitude: {selectedPoint.lng}°
+              </Typography>
+            </Box>
           )}
-        </Box>
-
-        {selectedPoint && (
-          <Box sx={{ marginTop: 2, fontSize: '0.875rem' }}>
-            <Typography variant="body2" fontWeight="bold">
-              Selected Location:
-            </Typography>
-            <Typography variant="body2">
-              Latitude: {selectedPoint.lat}°
-            </Typography>
-            <Typography variant="body2">
-              Longitude: {selectedPoint.lng}°
-            </Typography>
-          </Box>
-        )}
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </ThemeProvider>
   );
 };
 

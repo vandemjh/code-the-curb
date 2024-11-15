@@ -17,6 +17,7 @@ function App() {
         <ParkingForm />
       </motion.div>
       <MapPicker/>
+      <MapPicker/>
     </div>
   );
 }

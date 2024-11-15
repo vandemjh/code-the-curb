@@ -1,62 +1,18 @@
-import React, { useState } from 'react';
 import {
-  Paper,
-  Typography,
-  TextField,
+  Box,
   Button,
+  Paper,
+  Stack,
+  TextField,
+  ThemeProvider,
   ToggleButton,
   ToggleButtonGroup,
-  Stack,
-  Box,
-  ThemeProvider,
-  createTheme,
-  alpha,
+  Typography
 } from '@mui/material';
-import { MapPin, Navigation, ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-
-// Create custom dark theme
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#3b82f6',
-      light: '#60a5fa',
-      dark: '#2563eb',
-    },
-    background: {
-      paper: '#1e293b',
-      default: '#0f172a',
-    },
-  },
-  shape: {
-    borderRadius: 12,
-  },
-  components: {
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            backgroundColor: alpha('#1e293b', 0.4),
-          },
-        },
-      },
-    },
-    MuiToggleButton: {
-      styleOverrides: {
-        root: {
-          '&.Mui-selected': {
-            backgroundColor: '#3b82f6',
-            color: '#fff',
-            '&:hover': {
-              backgroundColor: '#2563eb',
-            },
-          },
-        },
-      },
-    },
-  },
-});
+import { ArrowRight, MapPin, Navigation } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import React, { useState } from 'react';
+import { darkTheme } from '../util/theme';
 
 const ParkingForm = () => {
   const [isOneWay, setIsOneWay] = useState(false);
