@@ -1,4 +1,5 @@
 import './App.css';
+import MapPicker from './components/MapPicker';
 import ParkingForm from './components/RouteForm';
 import { motion } from 'motion/react';
 
@@ -15,6 +16,7 @@ function App() {
         <header></header>
         <ParkingForm />
       </motion.div>
+      <MapPicker/>
     </div>
   );
 }
