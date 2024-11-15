@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import { darkTheme } from '../util/theme';
 
 const bounds = {
-  topLeft: { lat: 38.934819, lng: -77.174734 },
-  bottomRight: { lat: 38.825924, lng: -77.031768 },
+  topLeft: { lat: 38.934819, long: -77.174734 },
+  bottomRight: { lat: 38.825924, long: -77.031768 },
 };
 
 const dims = {
@@ -25,14 +25,14 @@ const LocationPicker = ({ selectedPoint, setSelectedPoint }) => {
 
   const pixelToCoordinates = (x, y) => {
     const latRange = bounds.topLeft.lat - bounds.bottomRight.lat;
-    const lngRange = bounds.bottomRight.lng - bounds.topLeft.lng;
+    const longRange = bounds.bottomRight.long - bounds.topLeft.long;
 
     const lat = bounds.topLeft.lat - (y / mapHeight) * latRange;
-    const lng = bounds.topLeft.lng + (x / mapWidth) * lngRange;
+    const long = bounds.topLeft.long + (x / mapWidth) * longRange;
 
     return {
       lat: parseFloat(lat.toFixed(6)),
-      lng: parseFloat(lng.toFixed(6)),
+      long: parseFloat(long.toFixed(6)),
     };
   };
 

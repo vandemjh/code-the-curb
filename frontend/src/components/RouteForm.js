@@ -17,13 +17,19 @@ import {
   CircleArrowLeft,
   CircleArrowRight,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { darkTheme } from '../util/theme';
 import LocationPicker from './LocationPicker';
 import TimePicker from './TimePicker';
 import DayPicker from './DayPicker';
+import {
+  getApiData,
+  getClosestBlockfaceId,
+  predict,
+} from '../service/predict.service';
+import Chart from './Chart';
 
-const buttonTexts = ['Start', 'Next', 'Next', 'Submit'];
+const buttonTexts = ['Start', 'Next', 'Next', 'Submit', 'Done!'];
 
 const ParkingForm = () => {
   const [isOneWay, setIsOneWay] = useState(false);
@@ -32,6 +38,10 @@ const ParkingForm = () => {
   const [selectedFromTime, setSelectedFromTime] = useState(null);
   const [selectedToTime, setSelectedToTime] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [apiData, setApiData] = useState(null);
+  const [result, setResult] = useState(null);
+  const [fromBlock, setFromBlock] = useState(null);
+  const [toBlock, setToBlock] = useState(null);
 
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
@@ -42,20 +52,58 @@ const ParkingForm = () => {
     }
   };
 
+  useEffect(() => {
+    getApiData().then((d) => setApiData(d));
+  }, []);
+
   const handleNext = (e) => {
     e.preventDefault();
     setDirection(1);
-    if (step >= buttonTexts.length - 1) {
+    if (buttonTexts[step] === 'Submit') {
+      const fromBlock = getClosestBlockfaceId(
+        apiData,
+        pickerFromPoint.lat,
+        pickerFromPoint.long,
+      );
+      setFromBlock(fromBlock);
+      const toBlock = getClosestBlockfaceId(
+        apiData,
+        pickerToPoint.lat,
+        pickerToPoint.long,
+      );
+      setToBlock(toBlock);
+
       const req = {
         isOneWay,
+        fromBlock,
+        toBlock,
         pickerFromPoint,
         pickerToPoint,
         selectedFromTime,
         selectedToTime,
         selectedDay,
       };
-      console.log('submitting', req);
-      return;
+
+      console.log('req', req);
+
+      Promise.all([
+        predict({
+          block_id: fromBlock,
+          day: selectedDay,
+        }),
+        predict({
+          block_id: toBlock,
+          day: selectedDay,
+        }),
+      ])
+        .then((i) => {
+          const res = {
+            from: i[0],
+            to: i[1],
+          };
+          setResult(res);
+        })
+        .catch((e) => console.error(e));
     }
     const adder = isOneWay && step === 0 ? 2 : 1;
     setStep((prev) => prev + adder);
@@ -205,6 +253,18 @@ const ParkingForm = () => {
                     <DayPicker onDayChange={setSelectedDay} />
                   </Stack>
                 )}
+                {step === 4 && (
+                  <Stack
+                    sx={{ display: 'flex', alignItems: 'center', gap: '1em' }}
+                  >
+                    <Typography variant="h5" align="center">
+                      Results from {fromBlock} at {selectedFromTime} to{' '}
+                      {toBlock} at {selectedToTime}
+                    </Typography>
+
+                    <Chart fromData={result?.from} toData={result?.to} />
+                  </Stack>
+                )}
               </motion.div>
             </AnimatePresence>
           </CardContent>
@@ -219,26 +279,28 @@ const ParkingForm = () => {
             gap: '0.5em',
           }}
         >
-          <Button
-            fullWidth
-            type="submit"
-            variant="contained"
-            size="large"
-            sx={{
-              mt: 2,
-              py: 1.5,
-              fontSize: '1rem',
-              fontWeight: 600,
-              textTransform: 'none',
-              background: 'linear-gradient(45deg, #3b82f6, #2563eb)',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #2563eb, #1d4ed8)',
-              },
-            }}
-            endIcon={<CircleArrowRight size={20} />}
-          >
-            {buttonTexts[step]}
-          </Button>
+          {step < buttonTexts.length - 1 && (
+            <Button
+              fullWidth
+              type="submit"
+              variant="contained"
+              size="large"
+              sx={{
+                mt: 2,
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 600,
+                textTransform: 'none',
+                background: 'linear-gradient(45deg, #3b82f6, #2563eb)',
+                '&:hover': {
+                  background: 'linear-gradient(45deg, #2563eb, #1d4ed8)',
+                },
+              }}
+              endIcon={<CircleArrowRight size={20} />}
+            >
+              {buttonTexts[step]}
+            </Button>
+          )}
           {step > 0 && (
             <Button
               fullWidth
