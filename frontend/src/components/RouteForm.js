@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  Card,
+  CardContent,
   Paper,
   Stack,
   ThemeProvider,
@@ -80,138 +82,153 @@ const ParkingForm = () => {
           mx: 'auto',
           p: 4,
           background: 'linear-gradient(145deg, #1e293b 0%, #0f172a 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '1em',
         }}
       >
-        <Stack spacing={4} sx={{ alignItems: 'center' }}>
-          <motion.div
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            variants={imageVariants}
-            initial="initial"
-            animate="animate"
-          >
-            <img
-              src="arlicon.png"
-              alt="icon"
-              className="arlicon"
-              style={{
-                width: '100%',
-                height: 'auto',
-              }}
-            />
-          </motion.div>
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={step}
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-            >
-              {step === 0 && (
-                <>
-                  <Typography
-                    variant="h4"
-                    align="center"
-                    sx={{
-                      fontWeight: 700,
-                      background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
-                      backgroundClip: 'text',
-                      mb: 2,
-                    }}
-                  >
-                    Arlipark
-                  </Typography>
-                  <Stack spacing={4}>
-                    <ToggleButtonGroup
-                      value={isOneWay ? 'one-way' : 'two-way'}
-                      exclusive
-                      onChange={handleModeChange}
-                      fullWidth
-                    >
-                      <ToggleButton value="one-way">
-                        <ArrowRight size={18} style={{ marginRight: 8 }} />
-                        One way
-                      </ToggleButton>
-                      <ToggleButton value="two-way">
-                        <ArrowLeftRight size={18} style={{ marginRight: 8 }} />
-                        Two way
-                      </ToggleButton>
-                    </ToggleButtonGroup>
-                  </Stack>
-                </>
-              )}
-              {step === 1 && (
-                <>
-                  <LocationPicker
-                    selectedPoint={pickerOnePoint}
-                    setSelectedPoint={setPickerOnePoint}
-                  />
-                  <TimePicker />
-                </>
-              )}
-              {step === 2 && (
-                <>
-                  <LocationPicker
-                    selectedPoint={pickerTwoPoint}
-                    setSelectedPoint={setPickerTwoPoint}
-                  />
-                  <TimePicker />
-                </>
-              )}
-              {step === 3 && <p>Submit your form!</p>}
-            </motion.div>
-          </AnimatePresence>
-
-          <Box component="form" onSubmit={handleNext}>
-            <Stack spacing={2.5}>
-              <Button
-                fullWidth
-                type="submit"
-                variant="contained"
-                size="large"
-                sx={{
-                  mt: 2,
-                  py: 1.5,
-                  fontSize: '1rem',
-                  fontWeight: 600,
-                  textTransform: 'none',
-                  background: 'linear-gradient(45deg, #3b82f6, #2563eb)',
-                  '&:hover': {
-                    background: 'linear-gradient(45deg, #2563eb, #1d4ed8)',
-                  },
-                }}
-                endIcon={<CircleArrowRight size={20} />}
+        <motion.div
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          variants={imageVariants}
+          initial="initial"
+          animate="animate"
+        >
+          <img
+            src="arlicon.png"
+            alt="icon"
+            className="arlicon"
+            style={{
+              width: '100%',
+              height: 'auto',
+            }}
+          />
+        </motion.div>
+        <Card sx={{ width: 'fit-content', padding: 2, borderRadius: '12' }}>
+          <CardContent>
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={step}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
               >
-                {buttonTexts[step]}
-              </Button>
-              {step > 0 && (
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  size="large"
-                  onClick={handleBack}
-                  sx={{
-                    py: 1.5,
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    textTransform: 'none',
-                    borderColor: '#3b82f6',
-                    color: '#3b82f6',
-                    '&:hover': {
-                      borderColor: '#2563eb',
-                      color: '#2563eb',
-                    },
-                  }}
-                  endIcon={<CircleArrowLeft size={20} />}
-                >
-                  Back
-                </Button>
-              )}
-            </Stack>
-          </Box>
-        </Stack>
+                {step === 0 && (
+                  <>
+                    <Typography
+                      variant="h4"
+                      align="center"
+                      sx={{
+                        fontWeight: 700,
+                        background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
+                        backgroundClip: 'text',
+                        mb: 2,
+                      }}
+                    >
+                      Arlipark
+                    </Typography>
+                    <Stack spacing={4}>
+                      <ToggleButtonGroup
+                        value={isOneWay ? 'one-way' : 'two-way'}
+                        exclusive
+                        onChange={handleModeChange}
+                        fullWidth
+                      >
+                        <ToggleButton value="one-way">
+                          <ArrowRight size={18} style={{ marginRight: 8 }} />
+                          One way
+                        </ToggleButton>
+                        <ToggleButton value="two-way">
+                          <ArrowLeftRight
+                            size={18}
+                            style={{ marginRight: 8 }}
+                          />
+                          Two way
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+                    </Stack>
+                  </>
+                )}
+                {step === 1 && (
+                  <>
+                    <LocationPicker
+                      selectedPoint={pickerOnePoint}
+                      setSelectedPoint={setPickerOnePoint}
+                    />
+                    <TimePicker />
+                  </>
+                )}
+                {step === 2 && (
+                  <>
+                    <LocationPicker
+                      selectedPoint={pickerTwoPoint}
+                      setSelectedPoint={setPickerTwoPoint}
+                    />
+                    <TimePicker />
+                  </>
+                )}
+                {step === 3 && <p>Submit your form!</p>}
+              </motion.div>
+            </AnimatePresence>
+          </CardContent>
+        </Card>
+        <Box
+          component="form"
+          onSubmit={handleNext}
+          sx={{
+            width: "50%",
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5em',
+          }}
+        >
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            size="large"
+            sx={{
+              mt: 2,
+              py: 1.5,
+              fontSize: '1rem',
+              fontWeight: 600,
+              textTransform: 'none',
+              background: 'linear-gradient(45deg, #3b82f6, #2563eb)',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #2563eb, #1d4ed8)',
+              },
+            }}
+            endIcon={<CircleArrowRight size={20} />}
+          >
+            {buttonTexts[step]}
+          </Button>
+          {step > 0 && (
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              onClick={handleBack}
+              sx={{
+                py: 1.5,
+                fontSize: '1rem',
+                fontWeight: 600,
+                textTransform: 'none',
+                borderColor: '#3b82f6',
+                color: '#3b82f6',
+                '&:hover': {
+                  borderColor: '#2563eb',
+                  color: '#2563eb',
+                },
+              }}
+              endIcon={<CircleArrowLeft size={20} />}
+            >
+              Back
+            </Button>
+          )}
+        </Box>
       </Paper>
     </ThemeProvider>
   );

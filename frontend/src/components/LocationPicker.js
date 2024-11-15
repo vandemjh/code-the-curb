@@ -59,46 +59,38 @@ const LocationPicker = ({ selectedPoint, setSelectedPoint }) => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <Card sx={{ width: 'fit-content', padding: 2, borderRadius: '12' }}>
-        <CardContent
-          sx={{
-            borderRadius: '12',
-          }}
-        >
-          <Box
-            sx={{
-              position: 'relative',
-              cursor: 'crosshair',
-              overflow: 'hidden',
-              width: mapWidth,
-              height: mapHeight,
-            }}
-            onClick={handleClick}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-          >
-            <img
-              src="map.png"
-              alt="Map"
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
+      <Box
+        sx={{
+          position: 'relative',
+          cursor: 'crosshair',
+          overflow: 'hidden',
+          width: mapWidth,
+          height: mapHeight,
+        }}
+        onClick={handleClick}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+      >
+        <img
+          src="map.png"
+          alt="Map"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
 
-            {selectedPoint && (
-              <IconButton
-                sx={{
-                  position: 'absolute',
-                  left: selectedPoint.x,
-                  top: selectedPoint.y,
-                  transform: 'translate(-53%, -80%)',
-                  color: 'red',
-                }}
-              >
-                <MapPin size={24} fill="red" color="black" />
-              </IconButton>
-            )}
-          </Box>
-        </CardContent>
-      </Card>
+        {selectedPoint && (
+          <IconButton
+            sx={{
+              position: 'absolute',
+              left: selectedPoint.x,
+              top: selectedPoint.y,
+              transform: 'translate(-53%, -80%)',
+              color: 'red',
+            }}
+          >
+            <MapPin size={24} fill="red" color="black" />
+          </IconButton>
+        )}
+      </Box>
     </ThemeProvider>
   );
 };
