@@ -43,7 +43,19 @@ const ParkingForm = () => {
   const handleNext = (e) => {
     e.preventDefault();
     setDirection(1);
-    setStep((prev) => Math.min(prev + 1, buttonTexts.length - 1));
+    if (step >= buttonTexts.length - 1) {
+      const req = {
+        isOneWay,
+        pickerFromPoint,
+        pickerToPoint,
+        selectedFromTime,
+        selectedToTime,
+      };
+      console.log('submitting', req);
+      return;
+    }
+    const adder = isOneWay && step === 0 ? 2 : 1;
+    setStep((prev) => prev + adder);
   };
 
   const handleBack = () => {
@@ -156,6 +168,9 @@ const ParkingForm = () => {
                   <Stack
                     sx={{ display: 'flex', alignItems: 'center', gap: '1em' }}
                   >
+                    <Typography variant="h5" align="center">
+                      Coming from
+                    </Typography>
                     <LocationPicker
                       selectedPoint={pickerFromPoint}
                       setSelectedPoint={setPickerFromPoint}
@@ -167,6 +182,10 @@ const ParkingForm = () => {
                   <Stack
                     sx={{ display: 'flex', alignItems: 'center', gap: '1em' }}
                   >
+                    {' '}
+                    <Typography variant="h5" align="center">
+                      Going to
+                    </Typography>
                     <LocationPicker
                       selectedPoint={pickerToPoint}
                       setSelectedPoint={setPickerToPoint}
