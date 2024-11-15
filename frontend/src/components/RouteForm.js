@@ -262,7 +262,7 @@ const ParkingForm = () => {
                       {toBlock} at {selectedToTime}
                     </Typography>
 
-                    <Chart fromData={result?.from} toData={result?.to} />
+                    <Chart fromData={result?.from} toData={result?.to} fromTime={selectedFromTime} toTime={selectedToTime} />
                   </Stack>
                 )}
               </motion.div>
