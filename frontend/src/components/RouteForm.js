@@ -21,8 +21,9 @@ import React, { useState } from 'react';
 import { darkTheme } from '../util/theme';
 import LocationPicker from './LocationPicker';
 import TimePicker from './TimePicker';
+import DayPicker from './DayPicker';
 
-const buttonTexts = ['Start', 'Next', 'Submit'];
+const buttonTexts = ['Start', 'Next', 'Next', 'Submit'];
 
 const ParkingForm = () => {
   const [isOneWay, setIsOneWay] = useState(false);
@@ -30,6 +31,7 @@ const ParkingForm = () => {
   const [pickerToPoint, setPickerToPoint] = useState(null);
   const [selectedFromTime, setSelectedFromTime] = useState(null);
   const [selectedToTime, setSelectedToTime] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(null);
 
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
@@ -50,6 +52,7 @@ const ParkingForm = () => {
         pickerToPoint,
         selectedFromTime,
         selectedToTime,
+        selectedDay,
       };
       console.log('submitting', req);
       return;
@@ -182,7 +185,6 @@ const ParkingForm = () => {
                   <Stack
                     sx={{ display: 'flex', alignItems: 'center', gap: '1em' }}
                   >
-                    {' '}
                     <Typography variant="h5" align="center">
                       Going to
                     </Typography>
@@ -193,6 +195,16 @@ const ParkingForm = () => {
                     <TimePicker onTimeChange={setSelectedToTime} />
                   </Stack>
                 )}
+                {step === 3 && (
+                  <Stack
+                    sx={{ display: 'flex', alignItems: 'center', gap: '1em' }}
+                  >
+                    <Typography variant="h5" align="center">
+                      On what day?
+                    </Typography>
+                    <DayPicker onDayChange={setSelectedDay} />
+                  </Stack>
+                )}
               </motion.div>
             </AnimatePresence>
           </CardContent>
@@ -201,7 +213,7 @@ const ParkingForm = () => {
           component="form"
           onSubmit={handleNext}
           sx={{
-            width: '50%',
+            width: '20em',
             display: 'flex',
             flexDirection: 'column',
             gap: '0.5em',
