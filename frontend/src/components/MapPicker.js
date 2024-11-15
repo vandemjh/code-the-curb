@@ -15,12 +15,17 @@ const bounds = {
   bottomRight: { lat: 38.825924, lng: -77.031768 },
 };
 
+const dims = {
+  width: 3077,
+  height: 2830
+}
+
 const LocationPicker = () => {
   const [selectedPoint, setSelectedPoint] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const mapWidth = 500;
-  const mapHeight = 600;
+  const mapWidth = dims.width / 10;
+  const mapHeight = dims.height / 10;
 
   const pixelToCoordinates = (x, y) => {
     const latRange = bounds.topLeft.lat - bounds.bottomRight.lat;
@@ -87,6 +92,7 @@ const LocationPicker = () => {
           >
             <img
               src="map.png"
+              onLoad={(e) => console.log({w: e.width, h: e.height})}
               alt="Map"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
