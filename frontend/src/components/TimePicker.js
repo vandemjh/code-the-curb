@@ -41,6 +41,7 @@ const TimePicker = ({ onTimeChange }) => {
           background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
           borderRadius: 12,
 
+          height: '20px',
           width: '50px',
           textAlign: 'center',
           padding: '4px',
@@ -59,6 +60,7 @@ const TimePicker = ({ onTimeChange }) => {
           borderRadius: 12,
 
           width: '50px',
+          height: '20px',
           textAlign: 'center',
           padding: '4px',
           border: 'none',
@@ -69,6 +71,7 @@ const TimePicker = ({ onTimeChange }) => {
         style={{
           background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
           borderRadius: 12,
+          height: '20px',
 
           padding: '4px 8px',
           border: 'none',

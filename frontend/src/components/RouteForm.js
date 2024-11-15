@@ -89,7 +89,7 @@ const ParkingForm = () => {
         }}
       >
         <motion.div
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          transition={{ duration: 3, ease: 'easeInOut' }}
           variants={imageVariants}
           initial="initial"
           animate="animate"
@@ -104,6 +104,20 @@ const ParkingForm = () => {
             }}
           />
         </motion.div>
+        {step === 0 && (
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{
+              fontWeight: 700,
+              background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
+              backgroundClip: 'text',
+              mb: 2,
+            }}
+          >
+            Arlipark
+          </Typography>
+        )}
         <Card sx={{ width: 'fit-content', padding: 2, borderRadius: '12' }}>
           <CardContent>
             <AnimatePresence mode="wait" custom={direction}>
@@ -117,40 +131,23 @@ const ParkingForm = () => {
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
               >
                 {step === 0 && (
-                  <>
-                    <Typography
-                      variant="h4"
-                      align="center"
-                      sx={{
-                        fontWeight: 700,
-                        background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
-                        backgroundClip: 'text',
-                        mb: 2,
-                      }}
+                  <Stack spacing={4}>
+                    <ToggleButtonGroup
+                      value={isOneWay ? 'one-way' : 'two-way'}
+                      exclusive
+                      onChange={handleModeChange}
+                      fullWidth
                     >
-                      Arlipark
-                    </Typography>
-                    <Stack spacing={4}>
-                      <ToggleButtonGroup
-                        value={isOneWay ? 'one-way' : 'two-way'}
-                        exclusive
-                        onChange={handleModeChange}
-                        fullWidth
-                      >
-                        <ToggleButton value="one-way">
-                          <ArrowRight size={18} style={{ marginRight: 8 }} />
-                          One way
-                        </ToggleButton>
-                        <ToggleButton value="two-way">
-                          <ArrowLeftRight
-                            size={18}
-                            style={{ marginRight: 8 }}
-                          />
-                          Two way
-                        </ToggleButton>
-                      </ToggleButtonGroup>
-                    </Stack>
-                  </>
+                      <ToggleButton value="one-way">
+                        <ArrowRight size={18} style={{ marginRight: 8 }} />
+                        One way
+                      </ToggleButton>
+                      <ToggleButton value="two-way">
+                        <ArrowLeftRight size={18} style={{ marginRight: 8 }} />
+                        Two way
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                  </Stack>
                 )}
                 {step === 1 && (
                   <>
@@ -179,7 +176,7 @@ const ParkingForm = () => {
           component="form"
           onSubmit={handleNext}
           sx={{
-            width: "50%",
+            width: '50%',
             display: 'flex',
             flexDirection: 'column',
             gap: '0.5em',
