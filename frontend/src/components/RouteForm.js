@@ -9,7 +9,12 @@ import {
   Typography,
 } from '@mui/material';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeftRight, ArrowRight, CircleArrowLeft, CircleArrowRight } from 'lucide-react';
+import {
+  ArrowLeftRight,
+  ArrowRight,
+  CircleArrowLeft,
+  CircleArrowRight,
+} from 'lucide-react';
 import React, { useState } from 'react';
 import { darkTheme } from '../util/theme';
 import LocationPicker from './LocationPicker';
@@ -42,15 +47,15 @@ const ParkingForm = () => {
 
   const variants = {
     enter: (direction) => ({
-      x: direction > 0 ? 300 : -300,
+      x: direction > 0 ? '100%' : '-100%',
       opacity: 0,
     }),
     center: {
-      x: 0,
+      x: '0%',
       opacity: 1,
     },
     exit: (direction) => ({
-      x: direction > 0 ? -300 : 300,
+      x: direction > 0 ? '-100%' : '100%',
       opacity: 0,
     }),
   };
@@ -68,7 +73,7 @@ const ParkingForm = () => {
         <Stack spacing={4} sx={{ alignItems: 'center' }}>
           <img src="arlicon.png" alt="icon" className="arlicon" />
 
-          <AnimatePresence initial={false} custom={direction}>
+          <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={step}
               custom={direction}
@@ -76,7 +81,7 @@ const ParkingForm = () => {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
               {step === 0 && (
                 <>
