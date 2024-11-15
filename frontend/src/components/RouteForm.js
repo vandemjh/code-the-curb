@@ -22,12 +22,15 @@ import { darkTheme } from '../util/theme';
 import LocationPicker from './LocationPicker';
 import TimePicker from './TimePicker';
 
-const buttonTexts = ['Find Parking', 'Next', 'Submit'];
+const buttonTexts = ['Start', 'Next', 'Submit'];
 
 const ParkingForm = () => {
   const [isOneWay, setIsOneWay] = useState(false);
-  const [pickerOnePoint, setPickerOnePoint] = useState(null);
-  const [pickerTwoPoint, setPickerTwoPoint] = useState(null);
+  const [pickerFromPoint, setPickerFromPoint] = useState(null);
+  const [pickerToPoint, setPickerToPoint] = useState(null);
+  const [selectedFromTime, setSelectedFromTime] = useState(null);
+  const [selectedToTime, setSelectedToTime] = useState(null);
+
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
 
@@ -89,7 +92,7 @@ const ParkingForm = () => {
         }}
       >
         <motion.div
-          transition={{ duration: 3, ease: 'easeInOut' }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
           variants={imageVariants}
           initial="initial"
           animate="animate"
@@ -150,24 +153,27 @@ const ParkingForm = () => {
                   </Stack>
                 )}
                 {step === 1 && (
-                  <>
+                  <Stack
+                    sx={{ display: 'flex', alignItems: 'center', gap: '1em' }}
+                  >
                     <LocationPicker
-                      selectedPoint={pickerOnePoint}
-                      setSelectedPoint={setPickerOnePoint}
+                      selectedPoint={pickerFromPoint}
+                      setSelectedPoint={setPickerFromPoint}
                     />
-                    <TimePicker />
-                  </>
+                    <TimePicker onTimeChange={setSelectedFromTime} />
+                  </Stack>
                 )}
                 {step === 2 && (
-                  <>
+                  <Stack
+                    sx={{ display: 'flex', alignItems: 'center', gap: '1em' }}
+                  >
                     <LocationPicker
-                      selectedPoint={pickerTwoPoint}
-                      setSelectedPoint={setPickerTwoPoint}
+                      selectedPoint={pickerToPoint}
+                      setSelectedPoint={setPickerToPoint}
                     />
-                    <TimePicker />
-                  </>
+                    <TimePicker onTimeChange={setSelectedToTime} />
+                  </Stack>
                 )}
-                {step === 3 && <p>Submit your form!</p>}
               </motion.div>
             </AnimatePresence>
           </CardContent>

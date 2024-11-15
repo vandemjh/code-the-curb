@@ -7,19 +7,23 @@ const TimePicker = ({ onTimeChange }) => {
 
   const handleHoursChange = (e) => {
     const value = e.target.value;
-    if (value >= 1 && value <= 12) {
-      setHours(value.padStart(2, '0'));
-      onTimeChange &&
-        onTimeChange(`${value.padStart(2, '0')}:${minutes} ${period}`);
+    if (value === '' || (value >= 1 && value <= 12)) {
+      setHours(value);
+      if (value !== '') {
+        onTimeChange &&
+          onTimeChange(`${value.padStart(2, '0')}:${minutes} ${period}`);
+      }
     }
   };
 
   const handleMinutesChange = (e) => {
     const value = e.target.value;
-    if (value >= 0 && value <= 59) {
-      setMinutes(value.padStart(2, '0'));
-      onTimeChange &&
-        onTimeChange(`${hours}:${value.padStart(2, '0')} ${period}`);
+    if (value === '' || (value >= 0 && value <= 59)) {
+      setMinutes(value);
+      if (value !== '') {
+        onTimeChange &&
+          onTimeChange(`${hours}:${value.padStart(2, '0')} ${period}`);
+      }
     }
   };
 
@@ -29,12 +33,29 @@ const TimePicker = ({ onTimeChange }) => {
     onTimeChange && onTimeChange(`${hours}:${minutes} ${newPeriod}`);
   };
 
+  const handleBlurHours = () => {
+    if (hours === '' || hours < 1 || hours > 12) {
+      setHours('12'); // Reset to default if invalid
+    } else {
+      setHours(hours.padStart(2, '0'));
+    }
+  };
+
+  const handleBlurMinutes = () => {
+    if (minutes === '' || minutes < 0 || minutes > 59) {
+      setMinutes('00'); // Reset to default if invalid
+    } else {
+      setMinutes(minutes.padStart(2, '0'));
+    }
+  };
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
       <input
         type="number"
         value={hours}
         onChange={handleHoursChange}
+        onBlur={handleBlurHours}
         min="1"
         max="12"
         style={{
@@ -44,7 +65,7 @@ const TimePicker = ({ onTimeChange }) => {
           height: '20px',
           width: '50px',
           textAlign: 'center',
-          padding: '4px',
+          fontSize: '16px',
           border: 'none',
         }}
       />
@@ -53,6 +74,7 @@ const TimePicker = ({ onTimeChange }) => {
         type="number"
         value={minutes}
         onChange={handleMinutesChange}
+        onBlur={handleBlurMinutes}
         min="0"
         max="59"
         style={{
@@ -62,7 +84,7 @@ const TimePicker = ({ onTimeChange }) => {
           width: '50px',
           height: '20px',
           textAlign: 'center',
-          padding: '4px',
+          fontSize: '16px',
           border: 'none',
         }}
       />
@@ -71,15 +93,25 @@ const TimePicker = ({ onTimeChange }) => {
         style={{
           background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
           borderRadius: 12,
-          height: '20px',
 
-          padding: '4px 8px',
+          width: '50px',
+          height: '20px',
+          textAlign: 'center',
+          fontSize: '16px',
           border: 'none',
-          cursor: 'pointer',
         }}
       >
         {period}
       </button>
+      <style>
+        {`
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+        `}
+      </style>
     </div>
   );
 };
