@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const TimePicker = ({ onTimeChange }) => {
+const daysOfWeek = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
+const TimePicker = ({ onTimeChange, onDayChange }) => {
+  const [day, setDay] = useState(0);
   const [hours, setHours] = useState('12');
   const [minutes, setMinutes] = useState('00');
   const [period, setPeriod] = useState('AM');
+
+  useEffect(() => {
+    onTimeChange && onTimeChange(`${hours}:${minutes} ${period}`);
+  });
 
   const handleHoursChange = (e) => {
     const value = e.target.value;
     if (value === '' || (value >= 1 && value <= 12)) {
       setHours(value);
-      if (value !== '') {
-        onTimeChange &&
-          onTimeChange(`${value.padStart(2, '0')}:${minutes} ${period}`);
-      }
+      onTimeChange &&
+        onTimeChange(`${value.padStart(2, '0')}:${minutes} ${period}`);
     }
   };
 
@@ -20,11 +33,15 @@ const TimePicker = ({ onTimeChange }) => {
     const value = e.target.value;
     if (value === '' || (value >= 0 && value <= 59)) {
       setMinutes(value);
-      if (value !== '') {
-        onTimeChange &&
-          onTimeChange(`${hours}:${value.padStart(2, '0')} ${period}`);
-      }
+      onTimeChange &&
+        onTimeChange(`${hours}:${value.padStart(2, '0')} ${period}`);
     }
+  };
+
+  const handleDayChange = () => {
+    if (day >= 6) setDay(0);
+    else setDay(day + 1);
+    onDayChange && onDayChange(day);
   };
 
   const handlePeriodChange = () => {
@@ -62,7 +79,7 @@ const TimePicker = ({ onTimeChange }) => {
           background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
           borderRadius: 12,
 
-          height: '20px',
+          height: '18px',
           width: '50px',
           textAlign: 'center',
           fontSize: '16px',
@@ -82,7 +99,7 @@ const TimePicker = ({ onTimeChange }) => {
           borderRadius: 12,
 
           width: '50px',
-          height: '20px',
+          height: '18px',
           textAlign: 'center',
           fontSize: '16px',
           border: 'none',
@@ -102,6 +119,21 @@ const TimePicker = ({ onTimeChange }) => {
         }}
       >
         {period}
+      </button>
+      <span> on </span>
+      <button
+        onClick={handleDayChange}
+        style={{
+          background: 'linear-gradient(45deg, #60a5fa, #3b82f6)',
+          borderRadius: 12,
+
+          height: '20px',
+          textAlign: 'center',
+          fontSize: '16px',
+          border: 'none',
+        }}
+      >
+        {daysOfWeek[day]}s
       </button>
       <style>
         {`
