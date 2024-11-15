@@ -1,145 +1,109 @@
-import React, { useState, useRef } from 'react';
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  Typography,
-  Box,
-  Button,
-  Stack,
-} from '@mui/material';
+import React, { useState } from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 import { MapPin } from 'lucide-react';
 
-const hw = {
-  width: 3077,
-  height: 2830,
-}
-
-const LocationPicker = ({
-  topLeftBounds = { lat: 90, lng: -180 },
-  bottomRightBounds = { lat: -90, lng: 180 },
-}) => {
+const LocationPicker = () => {
   const [selectedPoint, setSelectedPoint] = useState(null);
-  const [zoom, setZoom] = useState(0.2);
-  const [imageDimensions, setImageDimensions] = useState({
-    width: hw.width / 10,
-    height: hw.height / 10,
-  });
-  const [dragging, setDragging] = useState(false);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const lastMousePosition = useRef({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
-  const latRange = topLeftBounds.lat - bottomRightBounds.lat;
-  const lngRange = bottomRightBounds.lng - topLeftBounds.lng;
+  const mapWidth = 300;
+  const mapHeight = 200;
+
+  const bounds = {
+    topLeft: { lat: 38.934819, lng: -77.174734 },
+    bottomRight: { lat: 38.825924, lng: -77.031768 },
+  };
 
   const pixelToCoordinates = (x, y) => {
-    const lat =
-      topLeftBounds.lat -
-      ((y - offset.y) / (imageDimensions.height * zoom)) * latRange;
-    const lng =
-      topLeftBounds.lng +
-      ((x - offset.x) / (imageDimensions.width * zoom)) * lngRange;
+    const latRange = bounds.topLeft.lat - bounds.bottomRight.lat;
+    const lngRange = bounds.bottomRight.lng - bounds.topLeft.lng;
+
+    const lat = bounds.topLeft.lat - (y / mapHeight) * latRange;
+    const lng = bounds.topLeft.lng + (x / mapWidth) * lngRange;
+
     return {
       lat: parseFloat(lat.toFixed(6)),
       lng: parseFloat(lng.toFixed(6)),
     };
   };
 
+  const coordinatesToPixel = (lat, lng) => {
+    const latRange = bounds.topLeft.lat - bounds.bottomRight.lat;
+    const lngRange = bounds.bottomRight.lng - bounds.topLeft.lng;
+
+    const y = ((bounds.topLeft.lat - lat) / latRange) * mapHeight;
+    const x = ((lng - bounds.topLeft.lng) / lngRange) * mapWidth;
+
+    return { x, y };
+  };
+
   const handleClick = (e) => {
-    if (dragging) return;
+    if (isDragging) return;
+
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left - offset.x) / zoom;
-    const y = (e.clientY - rect.top - offset.y) / zoom;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
     const coordinates = pixelToCoordinates(x, y);
     setSelectedPoint({ x, y, ...coordinates });
   };
 
-  const handleZoomIn = () => setZoom((prevZoom) => Math.min(prevZoom + 0.2, 4));
-  const handleZoomOut = () =>
-    setZoom((prevZoom) => Math.max(prevZoom - 0.2, 0.2));
-
-  const handleMouseDown = (e) => {
-    setDragging(true);
-    lastMousePosition.current = { x: e.clientX, y: e.clientY };
+  const handleMouseDown = () => {
+    setIsDragging(false);
   };
 
-  const handleMouseMove = (e) => {
-    if (!dragging) return;
-    const dx = e.clientX - lastMousePosition.current.x;
-    const dy = e.clientY - lastMousePosition.current.y;
-    setOffset((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
-    lastMousePosition.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const handleMouseUp = () => {
-    setDragging(false);
+  const handleMouseMove = () => {
+    setIsDragging(true);
   };
 
   return (
     <Card sx={{ width: 'fit-content', padding: 2 }}>
-      <pre>{JSON.stringify({ zoom, offset })}</pre>
-      <CardHeader
-        title={<Typography variant="h6">Location Picker</Typography>}
-        subheader={
-          <Typography variant="body2" color="textSecondary">
-            Coverage: {topLeftBounds.lat}°N to {bottomRightBounds.lat}°N,{' '}
-            {topLeftBounds.lng}°E to {bottomRightBounds.lng}°E
-          </Typography>
-        }
-      />
+      <Typography variant="h6" component="div" sx={{ marginBottom: 1 }}>
+        Location Picker
+      </Typography>
       <CardContent>
-        <Stack direction="row" spacing={1} justifyContent="center" mb={2}>
-          <Button variant="contained" onClick={handleZoomIn}>
-            Zoom In
-          </Button>
-          <Button variant="contained" onClick={handleZoomOut}>
-            Zoom Out
-          </Button>
-        </Stack>
         <Box
           sx={{
             position: 'relative',
-            cursor: dragging ? 'grabbing' : 'grab',
-            border: '1px solid #e0e0e0',
+            cursor: 'crosshair',
+            border: '1px solid',
+            borderColor: 'grey.300',
             overflow: 'hidden',
-            width: imageDimensions.width,
-            height: imageDimensions.height,
+            width: mapWidth,
+            height: mapHeight,
           }}
           onClick={handleClick}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={() => setDragging(false)}
         >
-          <Box
-            component="img"
-            src="./map.png"
-            sx={{
-              position: 'absolute',
-              transform: `scale(${zoom}) translate(${offset.x / zoom}px, ${
-                offset.y / zoom
-              }px)`,
-              transformOrigin: 'top left',
-              pointerEvents: 'none',
-            }}
+          <img
+            src="map.png"
+            alt="Map"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
+
           {selectedPoint && (
-            <Box
+            <IconButton
               sx={{
                 position: 'absolute',
+                left: selectedPoint.x,
+                top: selectedPoint.y,
                 transform: 'translate(-50%, -50%)',
-                left: selectedPoint.x * zoom + offset.x,
-                top: selectedPoint.y * zoom + offset.y,
+                color: 'red',
               }}
             >
-              <MapPin size={24} fill="red" />
-            </Box>
+              <MapPin size={24} fill="red" color="black" />
+            </IconButton>
           )}
         </Box>
 
         {selectedPoint && (
-          <Box mt={2}>
-            <Typography variant="subtitle1" fontWeight="medium">
+          <Box sx={{ marginTop: 2, fontSize: '0.875rem' }}>
+            <Typography variant="body2" fontWeight="bold">
               Selected Location:
             </Typography>
             <Typography variant="body2">
