@@ -35,7 +35,7 @@ const TimePicker = ({ onTimeChange }) => {
 
   const handleBlurHours = () => {
     if (hours === '' || hours < 1 || hours > 12) {
-      setHours('12'); // Reset to default if invalid
+      setHours('12');
     } else {
       setHours(hours.padStart(2, '0'));
     }
@@ -43,7 +43,7 @@ const TimePicker = ({ onTimeChange }) => {
 
   const handleBlurMinutes = () => {
     if (minutes === '' || minutes < 0 || minutes > 59) {
-      setMinutes('00'); // Reset to default if invalid
+      setMinutes('00');
     } else {
       setMinutes(minutes.padStart(2, '0'));
     }

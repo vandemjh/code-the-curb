@@ -36,7 +36,6 @@ def predict_parking_day(block_id: str, day: int) -> List[float]:
     probabilities = []
 
     for hour in hours:
-        # Calculate cyclical features
         time_sin = np.sin(2 * np.pi * hour / 24)
         time_cos = np.cos(2 * np.pi * hour / 24)
         day_sin = np.sin(2 * np.pi * day / 7)
