@@ -20,12 +20,14 @@ const dims = {
   height: 2830
 }
 
+const scale = 5;
+
 const LocationPicker = () => {
   const [selectedPoint, setSelectedPoint] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const mapWidth = dims.width / 10;
-  const mapHeight = dims.height / 10;
+  const mapWidth = dims.width / scale;
+  const mapHeight = dims.height / scale;
 
   const pixelToCoordinates = (x, y) => {
     const latRange = bounds.topLeft.lat - bounds.bottomRight.lat;
@@ -38,16 +40,6 @@ const LocationPicker = () => {
       lat: parseFloat(lat.toFixed(6)),
       lng: parseFloat(lng.toFixed(6)),
     };
-  };
-
-  const coordinatesToPixel = (lat, lng) => {
-    const latRange = bounds.topLeft.lat - bounds.bottomRight.lat;
-    const lngRange = bounds.bottomRight.lng - bounds.topLeft.lng;
-
-    const y = ((bounds.topLeft.lat - lat) / latRange) * mapHeight;
-    const x = ((lng - bounds.topLeft.lng) / lngRange) * mapWidth;
-
-    return { x, y };
   };
 
   const handleClick = (e) => {
@@ -92,7 +84,6 @@ const LocationPicker = () => {
           >
             <img
               src="map.png"
-              onLoad={(e) => console.log({w: e.width, h: e.height})}
               alt="Map"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
@@ -103,7 +94,7 @@ const LocationPicker = () => {
                   position: 'absolute',
                   left: selectedPoint.x,
                   top: selectedPoint.y,
-                  transform: 'translate(-50%, -50%)',
+                  transform: 'translate(-53%, -80%)',
                   color: 'red',
                 }}
               >
@@ -111,20 +102,6 @@ const LocationPicker = () => {
               </IconButton>
             )}
           </Box>
-
-          {selectedPoint && (
-            <Box sx={{ marginTop: 2, fontSize: '0.875rem' }}>
-              <Typography variant="body2" fontWeight="bold">
-                Selected Location:
-              </Typography>
-              <Typography variant="body2">
-                Latitude: {selectedPoint.lat}°
-              </Typography>
-              <Typography variant="body2">
-                Longitude: {selectedPoint.lng}°
-              </Typography>
-            </Box>
-          )}
         </CardContent>
       </Card>
     </ThemeProvider>

@@ -1,5 +1,4 @@
 import './App.css';
-import MapPicker from './components/MapPicker';
 import ParkingForm from './components/RouteForm';
 import { motion } from 'motion/react';
 
@@ -13,11 +12,8 @@ function App() {
         transition={{ duration: 0.3, ease: 'easeInOut' }}
         className="overflow-hidden"
       >
-        <header></header>
         <ParkingForm />
       </motion.div>
-      <MapPicker/>
-      <MapPicker/>
     </div>
   );
 }
