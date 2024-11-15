@@ -18,6 +18,7 @@ import {
 import React, { useState } from 'react';
 import { darkTheme } from '../util/theme';
 import LocationPicker from './LocationPicker';
+import TimePicker from './TimePicker';
 
 const buttonTexts = ['Find Parking', 'Next', 'Submit'];
 
@@ -142,16 +143,22 @@ const ParkingForm = () => {
                 </>
               )}
               {step === 1 && (
-                <LocationPicker
-                  selectedPoint={pickerOnePoint}
-                  setSelectedPoint={setPickerOnePoint}
-                />
+                <>
+                  <LocationPicker
+                    selectedPoint={pickerOnePoint}
+                    setSelectedPoint={setPickerOnePoint}
+                  />
+                  <TimePicker />
+                </>
               )}
               {step === 2 && (
-                <LocationPicker
-                  selectedPoint={pickerTwoPoint}
-                  setSelectedPoint={setPickerTwoPoint}
-                />
+                <>
+                  <LocationPicker
+                    selectedPoint={pickerTwoPoint}
+                    setSelectedPoint={setPickerTwoPoint}
+                  />
+                  <TimePicker />
+                </>
               )}
               {step === 3 && <p>Submit your form!</p>}
             </motion.div>
