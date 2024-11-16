@@ -62,6 +62,7 @@ async def predict(request: ParkingRequest):
     Get parking predictions for each hour of the specified day.
     Returns probabilities for all 24 hours.
     """
+    print(request)
     # Validate day input
     if not 0 <= request.day <= 6:
         raise HTTPException(
