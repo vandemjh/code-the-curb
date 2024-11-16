@@ -9,8 +9,6 @@ services:
       - "80"
     depends_on:
       - backend
-    volumes:
-      - ./frontend/nginx.conf:/etc/nginx/nginx.conf:ro
     environment:
       - REACT_APP_API_URL=/api
     networks:
