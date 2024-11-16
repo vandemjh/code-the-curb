@@ -83,7 +83,6 @@ async def predict(request: ParkingRequest):
             ]
         }
     except Exception as e:
-        print(e)
         raise HTTPException(
             status_code=500,
             detail=f"Prediction failed: {str(e)}"
