@@ -55,7 +55,7 @@ export const getApiData = () => {
 };
 
 export const predict = (data) => {
-  const backend = process.env.NODE_ENV !== 'development' ? process.env.REACT_APP_BACKEND_URL : ''
+  const backend = process.env.REACT_APP_BACKEND_URL || ''
   return new Promise((res, rej) => {
     fetch(`${backend}/predict`, {
       body: JSON.stringify(data),
