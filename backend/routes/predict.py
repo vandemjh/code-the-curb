@@ -29,7 +29,7 @@ def predict_parking_day(block_id: str, day: int) -> List[float]:
     """
     Generate parking predictions for each hour of the specified day.
     """
-    categorical_features = ["stall_id"]
+    categorical_features = ["block_id"]
     numerical_features = ["time_sin", "time_cos", "day_sin", "day_cos"]
     
     hours = range(24)
@@ -42,7 +42,7 @@ def predict_parking_day(block_id: str, day: int) -> List[float]:
         day_cos = np.cos(2 * np.pi * day / 7)
 
         data = pd.DataFrame({
-            "stall_id": [block_id],
+            "block_id": [block_id],
             "time_sin": [time_sin],
             "time_cos": [time_cos],
             "day_sin": [day_sin],
@@ -62,7 +62,7 @@ async def predict(request: ParkingRequest):
     Get parking predictions for each hour of the specified day.
     Returns probabilities for all 24 hours.
     """
-    print(request)
+    print(f'Recieved: {request}')
     # Validate day input
     if not 0 <= request.day <= 6:
         raise HTTPException(
@@ -84,6 +84,7 @@ async def predict(request: ParkingRequest):
             ]
         }
     except Exception as e:
+        print(e.with_traceback())
         raise HTTPException(
             status_code=500,
             detail=f"Prediction failed: {str(e)}"
