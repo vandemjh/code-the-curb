@@ -1,6 +1,6 @@
 # Arlipark
 
-Arlipark uses [publicly available parking data](https://api.exactpark.com/arlington) to train a model to predict parking availability. The predictions are then presented in a React-based UI where, given the day of the week and time of day, can predict chances of parking availability. The finished project was deployed and presented to the [Hacking Showcase](https://www.arlingtonva.us/Government/Programs/Transportation/Events/Code-the-Curb-A-Parking-Data-Hacking-Showcase) for participants to use.
+Arlipark uses [publicly available parking data](https://api.exactpark.com/arlington) to train a model to predict parking availability. The predictions are then presented in a React-based UI where, given the day of the week and time of day, chances of parking availability are returned. The finished project was deployed and presented to the [Hacking Showcase](https://www.arlingtonva.us/Government/Programs/Transportation/Events/Code-the-Curb-A-Parking-Data-Hacking-Showcase) for participants to use.
 
 ## Project Structure
 
