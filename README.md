@@ -94,6 +94,10 @@ cd backend && source ./.venv/bin/activate
 python ./model/chart.py
 ```
 
+Example:
+
+![figure.png](./docs/figure.png)
+
 ## Frontend
 The frontend is built using React and Material-UI. It includes the following components:
 
